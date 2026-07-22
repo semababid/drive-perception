@@ -1,4 +1,4 @@
-"""Fast checks for the KITTI difficulty-tier logic — the one piece of the EDA that
+"""Fast checks for the KITTI difficulty-tier logic, the one piece of the EDA that
 encodes the benchmark protocol and must not drift."""
 
 from drive_perception.data.stats import Obj

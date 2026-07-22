@@ -2,7 +2,7 @@
 driving-perception model: class imbalance, the small-object problem, and KITTI's own
 Easy/Moderate/Hard difficulty tiers.
 
-The difficulty tiers are not ours — they are KITTI's official evaluation protocol,
+The difficulty tiers are not ours. They are KITTI's official evaluation protocol,
 defined purely from 2D box height, occlusion and truncation. Profiling them now means
 the mAP we report later can be broken down the same way the benchmark expects.
 """
@@ -21,7 +21,7 @@ import matplotlib.pyplot as plt
 from ..paths import KITTI_RAW, REPORTS
 
 # The three classes this project detects. Everything else in KITTI (Van, Truck, Tram,
-# Misc, Person_sitting, DontCare) is dropped — but we still count it so the imbalance
+# Misc, Person_sitting, DontCare) is dropped, but we still count it so the imbalance
 # is visible rather than hidden.
 KEEP = {"Car": "car", "Pedestrian": "pedestrian", "Cyclist": "cyclist"}
 
@@ -145,14 +145,14 @@ def _plots(objs: list[Obj], summary: dict, out: Path) -> None:
     for x, label, y_frac in [(25, "hard/mod min (25px)", 0.92), (40, "easy min (40px)", 0.80)]:
         plt.axvline(x, color="#dc2626", linestyle="--")
         plt.text(x + 3, top * y_frac, label, color="#dc2626", fontsize=8)
-    plt.title("2D box height — the small-object problem")
+    plt.title("2D box height and the small-object problem")
     plt.xlabel("box height (px)")
     plt.ylabel("objects")
     plt.tight_layout()
     plt.savefig(out / "box_height_distribution.png", dpi=120)
     plt.close()
 
-    # 3. Difficulty tiers per class — the protocol we will report mAP against.
+    # 3. Difficulty tiers per class, the protocol we will report mAP against.
     order = ["easy", "moderate", "hard", "ignored"]
     tier_colors = ["#16a34a", "#eab308", "#f97316", "#94a3b8"]
     classes = list(summary["per_class"])
@@ -173,7 +173,7 @@ def _plots(objs: list[Obj], summary: dict, out: Path) -> None:
 def _markdown(summary: dict) -> str:
     pc = summary["per_class"]
     lines = [
-        "# KITTI subset — exploratory analysis",
+        "# KITTI subset: exploratory analysis",
         "",
         f"- Frames analysed: **{summary['frames']}**",
         f"- Objects total: **{summary['objects_total']}** "
@@ -209,9 +209,9 @@ def _markdown(summary: dict) -> str:
         "## What this means for the model",
         "",
         f"- **Severe class imbalance:** Car:Pedestrian:Cyclist is roughly "
-        f"{car}:{ped}:{cyc}. Cyclist is the scarce class and the one to watch — its AP "
-        "should be reported separately rather than buried in a mean.",
-        f"- **Small, distant objects are the real difficulty, and unevenly so:** "
+        f"{car}:{ped}:{cyc}. Cyclist is the scarce class and the one to watch. Its AP "
+        "should be reported on its own rather than buried in a mean.",
+        f"- **Small, distant objects cause most of the difficulty, unevenly by class:** "
         f"{summary['small_object_fraction']:.0%} of kept objects fall below KITTI's 25 px "
         f"floor. It hits **{worst}** hardest ({ignored_frac(worst):.0%} ignored) and "
         f"**{second}** next ({ignored_frac(second):.0%}); the remaining class sits mostly "

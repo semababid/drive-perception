@@ -1,39 +1,40 @@
 # drive-perception
 
 Real-time multi-object detection and tracking for driving scenes. A YOLO11 detector
-feeds a ByteTrack tracker to produce stable object IDs across frames on the KITTI
-benchmark, then the detector is exported to ONNX and measured across inference
-backends — CPU, CoreML and TensorRT — so the speed/accuracy trade-off is explicit
-rather than assumed.
+feeds a ByteTrack tracker to keep stable object IDs across frames on the KITTI
+benchmark. The detector is then exported to ONNX and timed on three inference backends
+(CPU, CoreML, and TensorRT), so the speed and accuracy trade-off is measured instead of
+guessed.
 
-The project carries two detector sizes end to end: `yolo11n` as the fast edge target
-and `yolo11s` as the accuracy anchor. Reporting both turns the benchmark into a curve
-a perception engineer can actually read.
+Two detector sizes run through the whole project. `yolo11n` is the fast edge target and
+`yolo11s` is the accuracy anchor. Measuring both gives an accuracy-versus-latency curve
+rather than a single data point.
 
-> **Status:** early build. The roadmap in [docs/ROADMAP.md](docs/ROADMAP.md) tracks
-> what is done and what is next.
+> **Status:** early build. [docs/ROADMAP.md](docs/ROADMAP.md) tracks what is done and
+> what comes next.
 
 ## Why this project
 
-Driving-scene perception — detection, tracking and the deployment work to run it fast
-on constrained hardware — is the core of automotive and robotics computer-vision work.
-This repo is built to show the full path: not just a model that trains, but one that
-exports, quantises, benchmarks honestly, serves over an API and runs in a live demo.
+Driving-scene perception covers detection, tracking, and the deployment work needed to
+run a model fast on limited hardware. That combination sits at the core of most
+automotive and robotics computer-vision roles. This repo walks the full path: a model
+that trains, exports, quantises, reports honest numbers, serves over an API, and runs in
+a live demo.
 
 ## Planned stack
 
-- **Detector:** YOLO11 (`n` + `s`), fine-tuned on KITTI car / pedestrian / cyclist
-- **Tracking:** ByteTrack, with BoT-SORT as a comparison
-- **Dataset:** KITTI 2D object detection + multi-object tracking benchmarks
-- **Runtime:** ONNX Runtime (portable), TensorRT FP16/INT8 (edge, benchmarked on Colab)
-- **Serving:** FastAPI + Docker
-- **Demo:** Streamlit with a live FPS counter
+- Detector: YOLO11 (`n` and `s`), fine-tuned on KITTI car, pedestrian, and cyclist
+- Tracking: ByteTrack, with BoT-SORT as a comparison
+- Dataset: KITTI 2D object detection and multi-object tracking benchmarks
+- Runtime: ONNX Runtime for portability, TensorRT FP16 and INT8 for the edge numbers
+- Serving: FastAPI and Docker
+- Demo: Streamlit with a live FPS counter
 
 ## Metrics reported
 
-- Detection: mAP@0.5 and per-class AP (car / pedestrian / cyclist)
-- Tracking: MOTA, IDF1, ID-switches
-- Deployment: latency / FPS and model size across every backend
+- Detection: mAP@0.5 and per-class AP for car, pedestrian, and cyclist
+- Tracking: MOTA, IDF1, and ID-switches
+- Deployment: latency, FPS, and model size on every backend
 
 ## Development
 
@@ -45,4 +46,4 @@ pytest -m "not slow" -q
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE).

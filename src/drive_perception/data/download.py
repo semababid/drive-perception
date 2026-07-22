@@ -7,7 +7,7 @@ registration or login is needed.
 For a first pass you rarely want all 7,481 training frames. `download_subset` pulls
 just the first N straight out of the remote image archive using HTTP range requests,
 so a working set is a few hundred megabytes instead of twelve gigabytes. Only the
-`training` split is fetched — the `testing` split has no public labels, so it is
+`training` split is fetched. The `testing` split has no public labels, so it is
 useless for the evaluation this project reports.
 """
 
@@ -72,7 +72,7 @@ def _summary() -> tuple[int, int]:
 
 
 def download_subset(n: int, force: bool = False) -> tuple[int, int]:
-    """Fetch the first `n` training frames and their labels — a small, fast working set."""
+    """Fetch the first `n` training frames and their labels, a small and fast working set."""
     ensure_dirs()
     KITTI_RAW.mkdir(parents=True, exist_ok=True)
 
@@ -96,7 +96,7 @@ def download_subset(n: int, force: bool = False) -> tuple[int, int]:
 
 
 def download_full(force: bool = False) -> tuple[int, int]:
-    """Fetch the entire training split — all 7,481 frames and labels (~12 GB)."""
+    """Fetch the entire training split, all 7,481 frames and labels (~12 GB)."""
     ensure_dirs()
     KITTI_RAW.mkdir(parents=True, exist_ok=True)
 
