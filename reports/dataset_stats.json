@@ -1,0 +1,54 @@
+{
+  "frames": 300,
+  "objects_total": 2142,
+  "objects_kept": 1306,
+  "raw_class_counts": {
+    "Car": 1094,
+    "DontCare": 610,
+    "Pedestrian": 141,
+    "Van": 100,
+    "Cyclist": 71,
+    "Truck": 42,
+    "Misc": 38,
+    "Tram": 32,
+    "Person_sitting": 14
+  },
+  "per_class": {
+    "car": {
+      "count": 1094,
+      "tiers": {
+        "easy": 235,
+        "moderate": 387,
+        "hard": 210,
+        "ignored": 262
+      },
+      "median_box_height_px": 45.8,
+      "mean_aspect_w_over_h": 1.71
+    },
+    "pedestrian": {
+      "count": 141,
+      "tiers": {
+        "easy": 84,
+        "moderate": 32,
+        "hard": 17,
+        "ignored": 8
+      },
+      "median_box_height_px": 76.4,
+      "mean_aspect_w_over_h": 0.4
+    },
+    "cyclist": {
+      "count": 71,
+      "tiers": {
+        "easy": 34,
+        "moderate": 15,
+        "hard": 4,
+        "ignored": 18
+      },
+      "median_box_height_px": 71.7,
+      "mean_aspect_w_over_h": 0.7
+    }
+  },
+  "small_objects_under_25px": 168,
+  "small_object_fraction": 0.129,
+  "objects_per_frame_mean": 4.35
+}

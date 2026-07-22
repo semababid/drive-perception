@@ -18,7 +18,10 @@ from drive_perception.data import download
 
 
 def main() -> None:
-    p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    p = argparse.ArgumentParser(
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
     group = p.add_mutually_exclusive_group()
     group.add_argument(
         "--subset",
