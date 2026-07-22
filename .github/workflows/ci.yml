@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v3
+        with:
+          python-version: "3.12"
+
+      - name: Install
+        run: uv pip install --system -e ".[dev]"
+
+      - name: Lint
+        run: ruff check src tests scripts
+
+      # Only the fast tests run here. Anything marked slow needs downloaded KITTI data
+      # or trained weights, neither of which belongs in CI.
+      - name: Test
+        run: pytest -m "not slow" -q

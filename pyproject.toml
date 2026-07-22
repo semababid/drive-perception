@@ -1,0 +1,61 @@
+[project]
+name = "drive-perception"
+version = "0.1.0"
+description = "Real-time multi-object detection and tracking for driving scenes on KITTI, exported to ONNX and benchmarked across inference backends including TensorRT."
+requires-python = ">=3.12,<3.13"
+license = "MIT"
+license-files = ["LICENSE"]
+
+dependencies = [
+    "ultralytics>=8.3.0",
+    "torch>=2.4",
+    "torchvision>=0.19",
+    "opencv-python>=4.10",
+    "lap>=0.5.12",  # linear assignment, required by ByteTrack
+    "numpy>=1.26,<2.3",
+    "pillow>=10.4",
+    "pyyaml>=6.0",
+    "pandas>=2.2",
+    "matplotlib>=3.9",
+    "tqdm>=4.66",
+    "onnx>=1.17",
+    "onnxruntime>=1.19",
+    "onnxslim>=0.1.34",
+    "motmetrics>=1.4",  # MOTA / IDF1 for the tracking evaluation
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+    "python-multipart>=0.0.9",
+    "pydantic>=2.9",
+    "streamlit>=1.38",  # the live demo in Phase G
+]
+
+[project.optional-dependencies]
+# CoreML export only works on macOS and drags in a heavy toolchain, so it stays
+# out of the default install and out of CI.
+coreml = ["coremltools>=8.1"]
+dev = [
+    "pytest>=8.3",
+    "pytest-cov>=5.0",
+    "httpx>=0.27",
+    "ruff>=0.6",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/drive_perception"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "slow: needs downloaded data or trained weights, skipped in CI",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

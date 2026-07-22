@@ -1,0 +1,30 @@
+# Central configuration for the perception pipeline. Scripts read from here so the
+# same settings drive training, evaluation, export, benchmarking and serving.
+
+# Two detector sizes are carried through the whole project on purpose. `edge` is the
+# fast deployment target that gets exported and quantised; `accuracy` is the anchor
+# that shows what precision costs in latency. The benchmark reports both.
+models:
+  edge: yolo11n
+  accuracy: yolo11s
+
+# KITTI 2D classes we keep. The raw dataset has more, but these three are the ones
+# that matter for a driving-perception stack and that the tracking benchmark scores.
+classes:
+  - car
+  - pedestrian
+  - cyclist
+
+detect:
+  imgsz: 640
+  conf: 0.25
+  iou: 0.7
+
+# bytetrack or botsort. Phase D compares the two; this is the default the pipeline
+# and demo use.
+tracker: bytetrack
+
+train:
+  epochs: 50
+  batch: 16
+  patience: 15

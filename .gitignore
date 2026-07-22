@@ -1,0 +1,36 @@
+# KITTI images, sequences and derived label sets are large and rebuildable from
+# the download + convert scripts, so none of it is tracked. The one exception is a
+# tiny golden set used for regression tests.
+data/raw/
+data/interim/
+data/processed/
+data/tracking/
+!data/golden/
+!data/golden/**
+
+# Model weights, exported engines and run artifacts all rebuild from training and
+# export, so they stay out of git.
+models/
+runs/
+outputs/
+*.pt
+*.onnx
+*.mlpackage/
+*.engine
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+dist/
+build/
+
+# Editors and OS
+.DS_Store
+.idea/
+.vscode/
