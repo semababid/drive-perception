@@ -1,0 +1,133 @@
+{
+  "pretrained": {
+    "weights": "yolo11n.pt",
+    "results": [
+      {
+        "tier": "all",
+        "iou_threshold": 0.5,
+        "per_class_ap": {
+          "car": 0.7282,
+          "pedestrian": 0.4438,
+          "cyclist": 0.0101
+        },
+        "gt_counts": {
+          "car": 4365,
+          "pedestrian": 799,
+          "cyclist": 223
+        },
+        "mAP": 0.394
+      },
+      {
+        "tier": "easy",
+        "iou_threshold": 0.5,
+        "per_class_ap": {
+          "car": 0.8899,
+          "pedestrian": 0.6071,
+          "cyclist": 0.008
+        },
+        "gt_counts": {
+          "car": 1224,
+          "pedestrian": 419,
+          "cyclist": 129
+        },
+        "mAP": 0.5017
+      },
+      {
+        "tier": "moderate",
+        "iou_threshold": 0.5,
+        "per_class_ap": {
+          "car": 0.6663,
+          "pedestrian": 0.1537,
+          "cyclist": 0.0019
+        },
+        "gt_counts": {
+          "car": 1933,
+          "pedestrian": 234,
+          "cyclist": 76
+        },
+        "mAP": 0.274
+      },
+      {
+        "tier": "hard",
+        "iou_threshold": 0.5,
+        "per_class_ap": {
+          "car": 0.2684,
+          "pedestrian": 0.0576,
+          "cyclist": 0.0119
+        },
+        "gt_counts": {
+          "car": 1208,
+          "pedestrian": 146,
+          "cyclist": 18
+        },
+        "mAP": 0.1126
+      }
+    ]
+  },
+  "finetuned": {
+    "weights": "models/yolo11n_kitti.pt",
+    "results": [
+      {
+        "tier": "all",
+        "iou_threshold": 0.5,
+        "per_class_ap": {
+          "car": 0.9595,
+          "pedestrian": 0.7677,
+          "cyclist": 0.8457
+        },
+        "gt_counts": {
+          "car": 4365,
+          "pedestrian": 799,
+          "cyclist": 223
+        },
+        "mAP": 0.8576
+      },
+      {
+        "tier": "easy",
+        "iou_threshold": 0.5,
+        "per_class_ap": {
+          "car": 0.9935,
+          "pedestrian": 0.9283,
+          "cyclist": 0.9423
+        },
+        "gt_counts": {
+          "car": 1224,
+          "pedestrian": 419,
+          "cyclist": 129
+        },
+        "mAP": 0.9547
+      },
+      {
+        "tier": "moderate",
+        "iou_threshold": 0.5,
+        "per_class_ap": {
+          "car": 0.9694,
+          "pedestrian": 0.5955,
+          "cyclist": 0.679
+        },
+        "gt_counts": {
+          "car": 1933,
+          "pedestrian": 234,
+          "cyclist": 76
+        },
+        "mAP": 0.7479
+      },
+      {
+        "tier": "hard",
+        "iou_threshold": 0.5,
+        "per_class_ap": {
+          "car": 0.7922,
+          "pedestrian": 0.3451,
+          "cyclist": 0.3065
+        },
+        "gt_counts": {
+          "car": 1208,
+          "pedestrian": 146,
+          "cyclist": 18
+        },
+        "mAP": 0.4813
+      }
+    ]
+  },
+  "images": 1496
+}
