@@ -1,71 +1,71 @@
 {
   "weights": "yolo11n.pt",
   "conf": 0.05,
-  "images": 60,
+  "images": 1496,
   "results": [
     {
       "tier": "all",
       "iou_threshold": 0.5,
       "per_class_ap": {
-        "car": 0.7513,
-        "pedestrian": 0.5748,
-        "cyclist": 0.0
+        "car": 0.7282,
+        "pedestrian": 0.4438,
+        "cyclist": 0.0101
       },
       "gt_counts": {
-        "car": 144,
-        "pedestrian": 27,
-        "cyclist": 9
+        "car": 4365,
+        "pedestrian": 799,
+        "cyclist": 223
       },
-      "mAP": 0.442
+      "mAP": 0.394
     },
     {
       "tier": "easy",
       "iou_threshold": 0.5,
       "per_class_ap": {
-        "car": 0.8768,
-        "pedestrian": 0.7412,
-        "cyclist": 0.0
+        "car": 0.8899,
+        "pedestrian": 0.6071,
+        "cyclist": 0.008
       },
       "gt_counts": {
-        "car": 43,
-        "pedestrian": 18,
-        "cyclist": 8
+        "car": 1224,
+        "pedestrian": 419,
+        "cyclist": 129
       },
-      "mAP": 0.5393
+      "mAP": 0.5017
     },
     {
       "tier": "moderate",
       "iou_threshold": 0.5,
       "per_class_ap": {
-        "car": 0.7021,
-        "pedestrian": 0.0828,
-        "cyclist": 0.0
+        "car": 0.6663,
+        "pedestrian": 0.1537,
+        "cyclist": 0.0019
       },
       "gt_counts": {
-        "car": 68,
-        "pedestrian": 8,
-        "cyclist": 1
+        "car": 1933,
+        "pedestrian": 234,
+        "cyclist": 76
       },
-      "mAP": 0.2616
+      "mAP": 0.274
     },
     {
       "tier": "hard",
       "iou_threshold": 0.5,
       "per_class_ap": {
-        "car": 0.3601,
-        "pedestrian": 0.0312,
-        "cyclist": null
+        "car": 0.2684,
+        "pedestrian": 0.0576,
+        "cyclist": 0.0119
       },
       "gt_counts": {
-        "car": 33,
-        "pedestrian": 1,
-        "cyclist": 0
+        "car": 1208,
+        "pedestrian": 146,
+        "cyclist": 18
       },
-      "mAP": 0.1957
+      "mAP": 0.1126
     }
   ],
   "cyclist_diagnostic": {
-    "predictions": 54,
-    "best_iou": 0.419
+    "predictions": 2133,
+    "best_iou": 0.78
   }
 }
