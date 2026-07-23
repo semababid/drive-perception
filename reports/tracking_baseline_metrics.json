@@ -1,0 +1,59 @@
+{
+  "weights": "yolo11n.pt",
+  "tracker": "bytetrack",
+  "sequences": [
+    "0000",
+    "0001",
+    "0002"
+  ],
+  "results": {
+    "car": {
+      "mota": 0.459,
+      "idf1": 0.5423,
+      "motp": 0.2796,
+      "num_switches": 83.0,
+      "num_false_positives": 270.0,
+      "num_misses": 1787.0,
+      "num_fragmentations": 100.0,
+      "mostly_tracked": 25.0,
+      "mostly_lost": 19.0,
+      "num_objects": 3956.0
+    },
+    "pedestrian": {
+      "mota": -0.2771,
+      "idf1": 0.3798,
+      "motp": 0.1988,
+      "num_switches": 2.0,
+      "num_false_positives": 212.0,
+      "num_misses": 187.0,
+      "num_fragmentations": 7.0,
+      "mostly_tracked": 0.0,
+      "mostly_lost": 4.0,
+      "num_objects": 314.0
+    },
+    "cyclist": {
+      "mota": -0.441,
+      "idf1": 0.0833,
+      "motp": 0.4136,
+      "num_switches": 0.0,
+      "num_false_positives": 116.0,
+      "num_misses": 214.0,
+      "num_fragmentations": 0.0,
+      "mostly_tracked": 0.0,
+      "mostly_lost": 2.0,
+      "num_objects": 229.0
+    },
+    "OVERALL": {
+      "mota": 0.3619,
+      "idf1": 0.5057,
+      "motp": 0.276,
+      "num_switches": 85.0,
+      "num_false_positives": 598.0,
+      "num_misses": 2188.0,
+      "num_fragmentations": 107.0,
+      "mostly_tracked": 25.0,
+      "mostly_lost": 25.0,
+      "num_objects": 4499.0
+    }
+  }
+}
