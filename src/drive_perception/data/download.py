@@ -32,20 +32,45 @@ LABEL_PREFIX = "training/label_2/"
 
 
 def _stream_download(url: str, dest: Path, force: bool) -> Path:
-    """Download a whole archive with a progress bar, skipping if already present."""
+    """Download an archive, resuming a partial transfer instead of starting over.
+
+    Bytes land in a `.part` file and are renamed into place only once the full length
+    has arrived. A twelve gigabyte download is long enough to be interrupted, and
+    writing straight to the final name would leave a truncated archive that the next
+    run happily mistakes for a finished one."""
     if dest.exists() and not force:
         print(f"  cached  {dest.name}")
         return dest
     dest.parent.mkdir(parents=True, exist_ok=True)
-    with urllib.request.urlopen(url) as response:  # noqa: S310  (fixed, trusted mirror)
-        total = int(response.headers.get("Content-Length", 0))
+    part = dest.with_name(dest.name + ".part")
+    have = part.stat().st_size if part.exists() else 0
+
+    request = urllib.request.Request(url)
+    if have:
+        request.add_header("Range", f"bytes={have}-")
+
+    with urllib.request.urlopen(request) as response:  # noqa: S310  (fixed, trusted mirror)
+        # 206 means the server honoured the range. Anything else and we start again.
+        resuming = response.status == 206
+        if have and not resuming:
+            have = 0
+        total = int(response.headers.get("Content-Length", 0)) + have
+        if have:
+            print(f"  resuming {dest.name} at {have / 1e9:.1f} GB")
         with (
-            open(dest, "wb") as fh,
-            tqdm(total=total, unit="B", unit_scale=True, desc=dest.name) as bar,
+            open(part, "ab" if resuming else "wb") as fh,
+            tqdm(
+                total=total, initial=have, unit="B", unit_scale=True, desc=dest.name
+            ) as bar,
         ):
             while chunk := response.read(1 << 20):
                 fh.write(chunk)
                 bar.update(len(chunk))
+
+    got = part.stat().st_size
+    if total and got != total:
+        raise OSError(f"{dest.name} incomplete: got {got} of {total} bytes")
+    part.rename(dest)
     return dest
 
 
