@@ -1,0 +1,71 @@
+{
+  "weights": "yolo11n.pt",
+  "conf": 0.05,
+  "images": 60,
+  "results": [
+    {
+      "tier": "all",
+      "iou_threshold": 0.5,
+      "per_class_ap": {
+        "car": 0.7513,
+        "pedestrian": 0.5748,
+        "cyclist": 0.0
+      },
+      "gt_counts": {
+        "car": 144,
+        "pedestrian": 27,
+        "cyclist": 9
+      },
+      "mAP": 0.442
+    },
+    {
+      "tier": "easy",
+      "iou_threshold": 0.5,
+      "per_class_ap": {
+        "car": 0.8768,
+        "pedestrian": 0.7412,
+        "cyclist": 0.0
+      },
+      "gt_counts": {
+        "car": 43,
+        "pedestrian": 18,
+        "cyclist": 8
+      },
+      "mAP": 0.5393
+    },
+    {
+      "tier": "moderate",
+      "iou_threshold": 0.5,
+      "per_class_ap": {
+        "car": 0.7021,
+        "pedestrian": 0.0828,
+        "cyclist": 0.0
+      },
+      "gt_counts": {
+        "car": 68,
+        "pedestrian": 8,
+        "cyclist": 1
+      },
+      "mAP": 0.2616
+    },
+    {
+      "tier": "hard",
+      "iou_threshold": 0.5,
+      "per_class_ap": {
+        "car": 0.3601,
+        "pedestrian": 0.0312,
+        "cyclist": null
+      },
+      "gt_counts": {
+        "car": 33,
+        "pedestrian": 1,
+        "cyclist": 0
+      },
+      "mAP": 0.1957
+    }
+  ],
+  "cyclist_diagnostic": {
+    "predictions": 54,
+    "best_iou": 0.419
+  }
+}
