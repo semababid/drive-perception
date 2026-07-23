@@ -15,11 +15,12 @@ from __future__ import annotations
 
 import urllib.request
 import zipfile
+from collections.abc import Sequence
 from pathlib import Path
 
 from tqdm import tqdm
 
-from ..paths import KITTI_RAW, RAW, ensure_dirs
+from ..paths import KITTI_RAW, RAW, TRACKING, ensure_dirs
 
 MIRROR = "https://s3.eu-central-1.amazonaws.com/avg-kitti"
 IMAGES_URL = f"{MIRROR}/data_object_image_2.zip"
@@ -29,6 +30,14 @@ LABELS_URL = f"{MIRROR}/data_object_label_2.zip"
 # image file that share a stem describe the same frame.
 IMAGE_PREFIX = "training/image_2/"
 LABEL_PREFIX = "training/label_2/"
+
+# Tracking is a separate benchmark with its own archives. The images are about 15 GB
+# for all 21 training sequences, but each sequence is self-contained, so range requests
+# can pull two or three of them without touching the rest.
+TRACK_IMAGES_URL = f"{MIRROR}/data_tracking_image_2.zip"
+TRACK_LABELS_URL = f"{MIRROR}/data_tracking_label_2.zip"
+TRACK_IMAGE_PREFIX = "training/image_02/"
+TRACK_LABEL_PREFIX = "training/label_02/"
 
 
 def _stream_download(url: str, dest: Path, force: bool) -> Path:
@@ -74,9 +83,15 @@ def _stream_download(url: str, dest: Path, force: bool) -> Path:
     return dest
 
 
-def _extract_prefix(archive: Path, prefix: str, ids: set[str] | None = None) -> int:
-    """Extract members under `prefix` into the KITTI tree. If `ids` is given, keep only
-    files whose stem is in it, so the labels stay aligned with a fetched image subset."""
+def _extract_prefix(
+    archive: Path,
+    prefix: str,
+    ids: set[str] | None = None,
+    dest: Path | None = None,
+) -> int:
+    """Extract members under `prefix` into `dest`. If `ids` is given, keep only files
+    whose stem is in it, so the labels stay aligned with the subset that was fetched."""
+    dest = dest or KITTI_RAW
     count = 0
     with zipfile.ZipFile(archive) as zf:
         for name in zf.namelist():
@@ -84,7 +99,7 @@ def _extract_prefix(archive: Path, prefix: str, ids: set[str] | None = None) -> 
                 continue
             if ids is not None and Path(name).stem not in ids:
                 continue
-            zf.extract(name, KITTI_RAW)
+            zf.extract(name, dest)
             count += 1
     return count
 
@@ -118,6 +133,43 @@ def download_subset(n: int, force: bool = False) -> tuple[int, int]:
     label_zip = _stream_download(LABELS_URL, RAW / "data_object_label_2.zip", force)
     _extract_prefix(label_zip, LABEL_PREFIX, ids=ids)
     return _summary()
+
+
+def download_tracking(sequences: Sequence[str], force: bool = False) -> dict[str, int]:
+    """Fetch whole tracking sequences by id, for example ("0000", "0001").
+
+    Unlike the detection set, tracking needs consecutive frames: a tracker can only be
+    scored on identity switches if it sees an object move through time. Each sequence
+    is a directory of ordered frames plus one label file covering the whole clip."""
+    ensure_dirs()
+    TRACKING.mkdir(parents=True, exist_ok=True)
+
+    from remotezip import RemoteZip
+
+    print(f"[1/2] fetching {len(sequences)} tracking sequences via range requests")
+    counts: dict[str, int] = {}
+    with RemoteZip(TRACK_IMAGES_URL) as rz:
+        names = rz.namelist()
+        for seq in sequences:
+            wanted = sorted(
+                m
+                for m in names
+                if m.startswith(f"{TRACK_IMAGE_PREFIX}{seq}/") and m.endswith(".png")
+            )
+            if not wanted:
+                raise ValueError(f"sequence {seq!r} not found in the tracking archive")
+            for name in tqdm(wanted, desc=f"seq {seq}", unit="img"):
+                rz.extract(name, TRACKING)
+            counts[seq] = len(wanted)
+
+    print("[2/2] fetching labels for those sequences")
+    label_zip = _stream_download(TRACK_LABELS_URL, RAW / "data_tracking_label_2.zip", force)
+    ids = set(sequences)
+    _extract_prefix(label_zip, TRACK_LABEL_PREFIX, ids=ids, dest=TRACKING)
+
+    for seq, n in counts.items():
+        print(f"  ready   sequence {seq}: {n} frames")
+    return counts
 
 
 def download_full(force: bool = False) -> tuple[int, int]:
