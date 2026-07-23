@@ -128,6 +128,32 @@ def draw_trails(
     return out
 
 
+def draw_hud(image: np.ndarray, lines: Sequence[str]) -> np.ndarray:
+    """Overlay a few lines of status text in the top left corner.
+
+    The panel is blended rather than drawn solid so the frame underneath stays visible.
+    Used by the video renderer and again by the live demo, which needs the same readout."""
+    out = image.copy()
+    if not lines:
+        return out
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    _, font_scale = _scale(out)
+    pad = 6
+    sizes = [cv2.getTextSize(t, font, font_scale, 1)[0] for t in lines]
+    width = max(w for w, _ in sizes) + pad * 2
+    line_h = max(h for _, h in sizes) + pad
+    height = line_h * len(lines) + pad
+
+    panel = out[0:height, 0:width].copy()
+    cv2.rectangle(panel, (0, 0), (width, height), (0, 0, 0), -1)
+    out[0:height, 0:width] = cv2.addWeighted(panel, 0.55, out[0:height, 0:width], 0.45, 0)
+
+    for i, text in enumerate(lines):
+        y = pad + line_h * (i + 1) - pad // 2
+        cv2.putText(out, text, (pad, y), font, font_scale, (255, 255, 255), 1, cv2.LINE_AA)
+    return out
+
+
 def save(image: np.ndarray, path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     cv2.imwrite(str(path), image)
