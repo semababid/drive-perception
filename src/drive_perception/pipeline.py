@@ -12,8 +12,9 @@ instead of sliding around as the box grows on approach.
 
 from __future__ import annotations
 
+import time
 from collections import deque
-from collections.abc import Iterator
+from collections.abc import Iterable, Iterator
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -21,7 +22,7 @@ import cv2
 import numpy as np
 
 from .tracker import Track, Tracker, track_label
-from .viz import draw_detections, draw_trails
+from .viz import draw_detections, draw_hud, draw_trails
 
 IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg"}
 
@@ -132,3 +133,81 @@ def run_sequence(
         if trails is not None:
             trails.update(tracks, index)
         yield FrameResult(index, tracks, annotate(frame, tracks, trails))
+
+
+def write_video(
+    frames: Iterable[np.ndarray],
+    out_path: Path,
+    fps: float = 10.0,
+    codec: str = "mp4v",
+) -> dict:
+    """Write frames to a video file, sized from the first frame.
+
+    OpenCV silently discards any frame whose size differs from the writer's, producing
+    a short video and no error at all, so mismatched frames are resized rather than
+    dropped. KITTI sequences vary in width between clips, which makes this a real case
+    and not a hypothetical one."""
+    writer = None
+    size: tuple[int, int] | None = None
+    written = resized = 0
+    try:
+        for frame in frames:
+            if writer is None:
+                size = (frame.shape[1], frame.shape[0])
+                out_path.parent.mkdir(parents=True, exist_ok=True)
+                writer = cv2.VideoWriter(
+                    str(out_path), cv2.VideoWriter_fourcc(*codec), fps, size
+                )
+                if not writer.isOpened():
+                    raise RuntimeError(f"could not open a video writer for {out_path}")
+            if (frame.shape[1], frame.shape[0]) != size:
+                frame = cv2.resize(frame, size)
+                resized += 1
+            writer.write(frame)
+            written += 1
+    finally:
+        if writer is not None:
+            writer.release()
+    return {"frames": written, "resized": resized, "size": size, "path": out_path}
+
+
+def render_video(
+    tracker: Tracker,
+    source: Path,
+    out_path: Path,
+    fps: float = 10.0,
+    limit: int | None = None,
+    with_trails: bool = True,
+    hud: bool = True,
+    codec: str = "mp4v",
+) -> dict:
+    """Track through a clip and write the annotated result to a video file.
+
+    The HUD reports the measured processing rate rather than the playback rate, since
+    the question a reviewer asks of a perception demo is how fast the model actually
+    ran, not how fast the file plays back."""
+    ids: set[int] = set()
+    started = time.perf_counter()
+
+    def annotated_frames() -> Iterator[np.ndarray]:
+        for result in run_sequence(tracker, source, with_trails, limit):
+            ids.update(t.track_id for t in result.tracks)
+            frame = result.annotated
+            if hud:
+                elapsed = time.perf_counter() - started
+                rate = (result.index + 1) / elapsed if elapsed > 0 else 0.0
+                frame = draw_hud(
+                    frame,
+                    [
+                        f"frame {result.index + 1}",
+                        f"tracking {len(result.tracks)} objects",
+                        f"{rate:.1f} FPS",
+                    ],
+                )
+            yield frame
+
+    stats = write_video(annotated_frames(), out_path, fps=fps, codec=codec)
+    elapsed = time.perf_counter() - started
+    stats["unique_ids"] = len(ids)
+    stats["process_fps"] = round(stats["frames"] / elapsed, 1) if elapsed else 0.0
+    return stats
