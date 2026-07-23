@@ -107,6 +107,27 @@ def draw_detections(
     return out
 
 
+def draw_trails(
+    image: np.ndarray,
+    trails: Sequence[tuple[Sequence[tuple[float, float]], int, str]],
+) -> np.ndarray:
+    """Draw the recent path of each tracked object.
+
+    Each entry is a run of points plus the class id and name used to colour it. The
+    trail is what makes tracking legible in a still frame: boxes alone look the same
+    whether ids are stable or flickering, while a clean path shows the association held."""
+    out = image.copy()
+    thickness, _ = _scale(out)
+    for points, cls_id, cls_name in trails:
+        if len(points) < 2:
+            continue
+        pts = np.asarray([[int(x), int(y)] for x, y in points], dtype=np.int32)
+        cv2.polylines(
+            out, [pts], False, color_for(cls_id, cls_name), thickness, cv2.LINE_AA
+        )
+    return out
+
+
 def save(image: np.ndarray, path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     cv2.imwrite(str(path), image)
