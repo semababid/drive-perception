@@ -112,11 +112,18 @@ def load_ground_truth(stems: Sequence[str], label_dir: Path) -> dict[str, list[G
 
 
 def map_predictions(dets: Sequence[Detection]) -> list[Detection]:
-    """Relabel COCO detections as KITTI classes, dropping everything unmapped."""
+    """Relabel detections as KITTI classes, dropping everything unmapped.
+
+    Handles both models the project uses. A COCO-pretrained model needs its names
+    translated, while the fine-tuned model already emits KITTI names and must pass
+    through untouched. Translating only the COCO names would silently discard every
+    pedestrian and cyclist the fine-tuned model found and report an AP of zero for
+    both, which looks like a broken model rather than a broken mapping."""
     out: list[Detection] = []
     for d in dets:
-        kitti = COCO_TO_KITTI.get(d.cls_name.lower())
-        if kitti is None:
+        name = d.cls_name.lower()
+        kitti = COCO_TO_KITTI.get(name, name)
+        if kitti not in CLASS_NAMES:
             continue
         out.append(
             Detection(

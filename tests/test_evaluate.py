@@ -76,6 +76,20 @@ def test_map_predictions_translates_coco_names():
     assert [d.cls_id for d in mapped] == [0, 1, 2]
 
 
+def test_map_predictions_passes_through_finetuned_names():
+    # The fine-tuned model already emits KITTI names. Dropping them here would report
+    # an AP of zero for pedestrian and cyclist and look like a broken model.
+    mapped = map_predictions(
+        [
+            _det((0, 0, 1, 1), name="car"),
+            _det((0, 0, 1, 1), name="pedestrian"),
+            _det((0, 0, 1, 1), name="cyclist"),
+        ]
+    )
+    assert [d.cls_name for d in mapped] == ["car", "pedestrian", "cyclist"]
+    assert [d.cls_id for d in mapped] == [0, 1, 2]
+
+
 def test_evaluate_perfect_match():
     gt = {"a": [GTBox((0, 0, 10, 10), 0, "easy")]}
     preds = {"a": [_det((0, 0, 10, 10))]}
