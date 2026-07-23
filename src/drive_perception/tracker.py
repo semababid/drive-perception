@@ -73,6 +73,7 @@ class Tracker:
         conf: float = 0.25,
         iou: float = 0.7,
         imgsz: int = 640,
+        classes: list[int] | None = None,
     ) -> None:
         from ultralytics import YOLO
 
@@ -84,6 +85,11 @@ class Tracker:
         self.conf = conf
         self.iou = iou
         self.imgsz = imgsz
+        # Restricting the classes matters for a COCO-pretrained model, which otherwise
+        # opens a track for every truck, bench and traffic light in a busy street and
+        # buries the objects we actually score. The fine-tuned model only knows the
+        # three KITTI classes, so it can leave this as None.
+        self.classes = classes
 
     def update(self, frame: str | Path | np.ndarray) -> list[Track]:
         """Feed the next frame and get back the currently tracked objects."""
@@ -94,6 +100,7 @@ class Tracker:
             conf=self.conf,
             iou=self.iou,
             imgsz=self.imgsz,
+            classes=self.classes,
             verbose=False,
         )[0]
         boxes = result.boxes
