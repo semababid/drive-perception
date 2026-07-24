@@ -9,15 +9,26 @@ from __future__ import annotations
 
 import argparse
 
-from drive_perception.config import load_config
-from drive_perception.export import DEFAULT_OPSET, describe_onnx, export_onnx
+from drive_perception.export import (
+    DEFAULT_OPSET,
+    KITTI_IMGSZ,
+    describe_onnx,
+    export_onnx,
+)
 
 
 def main() -> None:
-    cfg = load_config()
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--weights", default="models/yolo11n_kitti.pt")
-    p.add_argument("--imgsz", type=int, default=cfg.detect.imgsz)
+    p.add_argument(
+        "--imgsz",
+        type=int,
+        nargs="+",
+        default=list(KITTI_IMGSZ),
+        metavar="N",
+        help="one number for a square input, or height and width. Driving frames are "
+        "much wider than tall, so the default is a matching rectangle",
+    )
     p.add_argument("--opset", type=int, default=DEFAULT_OPSET)
     p.add_argument(
         "--dynamic",
@@ -26,8 +37,9 @@ def main() -> None:
     )
     args = p.parse_args()
 
+    imgsz = args.imgsz[0] if len(args.imgsz) == 1 else tuple(args.imgsz)
     path = export_onnx(
-        args.weights, imgsz=args.imgsz, opset=args.opset, dynamic=args.dynamic
+        args.weights, imgsz=imgsz, opset=args.opset, dynamic=args.dynamic
     )
     info = describe_onnx(path)
     print(f"written : {info['path']}")
