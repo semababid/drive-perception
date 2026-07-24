@@ -1,11 +1,43 @@
 """Export tests. The real export needs torch and is marked slow; the path and metadata
 handling are checked here against a hand-built ONNX graph, so no model is required."""
 
+import numpy as np
 import onnx
 import pytest
 from onnx import TensorProto, helper
 
-from drive_perception.export import DEFAULT_OPSET, describe_onnx, export_onnx, onnx_path_for
+from drive_perception.export import (
+    DEFAULT_OPSET,
+    KITTI_IMGSZ,
+    describe_onnx,
+    export_onnx,
+    onnx_path_for,
+    preprocess,
+)
+
+
+def test_default_export_shape_matches_driving_frames():
+    # Square exports pad a 3.3:1 driving frame with blank bars, which changes the
+    # apparent scale of every object and costs almost three times the pixels.
+    height, width = KITTI_IMGSZ
+    assert width > height
+    assert height % 32 == 0 and width % 32 == 0  # stride-aligned
+
+
+def test_preprocess_accepts_a_square_size():
+    out = preprocess(np.zeros((375, 1242, 3), np.uint8), 640)
+    assert out.shape == (1, 3, 640, 640)
+
+
+def test_preprocess_accepts_a_rectangle_as_height_width():
+    out = preprocess(np.zeros((375, 1242, 3), np.uint8), (224, 640))
+    assert out.shape == (1, 3, 224, 640)
+
+
+def test_preprocess_normalises_to_unit_range():
+    out = preprocess(np.full((10, 10, 3), 255, np.uint8), (32, 32))
+    assert out.dtype == np.float32
+    assert 0.0 <= out.min() and out.max() <= 1.0
 
 
 def test_onnx_path_sits_beside_the_checkpoint():
