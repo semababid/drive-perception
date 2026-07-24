@@ -19,11 +19,12 @@ matplotlib.use("Agg")  # headless: write PNGs, never open a window
 import matplotlib.pyplot as plt
 
 from ..paths import KITTI_RAW, REPORTS
+from .convert import KITTI_CLASSES
 
-# The three classes this project detects. Everything else in KITTI (Van, Truck, Tram,
-# Misc, Person_sitting, DontCare) is dropped, but we still count it so the imbalance
-# is visible rather than hidden.
-KEEP = {"Car": "car", "Pedestrian": "pedestrian", "Cyclist": "cyclist"}
+# The classes this project detects, taken from the one place they are defined. Every
+# other KITTI type (Van, Truck, Tram, Misc, Person_sitting, DontCare) is dropped, but
+# still counted below so the imbalance is visible rather than hidden.
+KEEP = KITTI_CLASSES
 
 # KITTI difficulty thresholds. min box height in pixels, max occlusion level, max
 # truncation fraction. An object failing even Hard is ignored by the benchmark.

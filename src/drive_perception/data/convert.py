@@ -22,10 +22,17 @@ from PIL import Image
 
 from ..paths import DETECT_DIR, KITTI_RAW
 
-# The kept classes and their YOLO ids. Anything not in here (Van, Truck, Tram, Misc,
-# Person_sitting, DontCare) is dropped.
-CLASS_ID = {"Car": 0, "Pedestrian": 1, "Cyclist": 2}
-CLASS_NAMES = ["car", "pedestrian", "cyclist"]  # index == id, for the data.yaml later
+# The single definition of which KITTI classes this project detects, mapping the name
+# used in the raw labels to the name used everywhere else. Everything downstream, the
+# label converter, the exploratory analysis, the detection metrics and the tracking
+# metrics, derives from this one dict. They were four separate copies once, which meant
+# adding a class required four coordinated edits and a missed one would have left the
+# detection and tracking evaluations quietly scoring different things.
+# Anything absent here (Van, Truck, Tram, Misc, Person_sitting, DontCare) is dropped.
+KITTI_CLASSES = {"Car": "car", "Pedestrian": "pedestrian", "Cyclist": "cyclist"}
+
+CLASS_NAMES = list(KITTI_CLASSES.values())  # index == class id
+CLASS_ID = {raw: index for index, raw in enumerate(KITTI_CLASSES)}
 
 
 @dataclass

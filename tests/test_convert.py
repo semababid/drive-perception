@@ -15,6 +15,19 @@ def test_center_and_size_are_normalized():
     assert row == "0 0.200000 0.600000 0.200000 0.400000"
 
 
+def test_every_class_view_comes_from_one_definition():
+    # These were four separate copies once. If they ever diverge again, the detection
+    # and tracking evaluations start scoring different things without any error.
+    from drive_perception.data.convert import CLASS_NAMES, KITTI_CLASSES
+    from drive_perception.data.stats import KEEP
+    from drive_perception.track_eval import TRACK_CLASSES
+
+    assert KEEP is KITTI_CLASSES
+    assert TRACK_CLASSES is KITTI_CLASSES
+    assert CLASS_NAMES == list(KITTI_CLASSES.values())
+    assert CLASS_ID == {raw: i for i, raw in enumerate(KITTI_CLASSES)}
+
+
 def test_class_ids_match_the_three_kept_classes():
     assert CLASS_ID == {"Car": 0, "Pedestrian": 1, "Cyclist": 2}
     assert to_yolo_bbox(_line("Pedestrian", 0, 0, 50, 100), 500, 500).startswith("1 ")

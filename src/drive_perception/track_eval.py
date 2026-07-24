@@ -34,12 +34,13 @@ if not hasattr(np, "asfarray"):  # pragma: no cover
 
 import motmetrics as mm  # noqa: E402  (must follow the shim above)
 
-from .data.convert import CLASS_NAMES  # noqa: E402
+from .data.convert import CLASS_NAMES, KITTI_CLASSES  # noqa: E402
 from .evaluate import COCO_TO_KITTI, iou  # noqa: E402
 from .tracker import Track  # noqa: E402
 
-# KITTI tracking labels use these names for the classes we score.
-TRACK_CLASSES = {"Car": "car", "Pedestrian": "pedestrian", "Cyclist": "cyclist"}
+# The tracking labels name classes exactly as the detection labels do, so the same
+# definition serves both and the two evaluations cannot drift apart.
+TRACK_CLASSES = KITTI_CLASSES
 
 # Classes too close to ours to score against, excluded rather than counted wrong.
 NEIGHBOUR_IGNORE: dict[str, set[str]] = {
