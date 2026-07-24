@@ -1,0 +1,42 @@
+{
+  "model": "yolo11n_kitti",
+  "frames": 100,
+  "imgsz": [
+    224,
+    640
+  ],
+  "results": [
+    {
+      "backend": "torch-mps",
+      "frames": 100,
+      "mean_ms": 17.07,
+      "median_ms": 15.53,
+      "p90_ms": 19.65,
+      "fps": 64.4
+    },
+    {
+      "backend": "torch-cpu",
+      "frames": 100,
+      "mean_ms": 17.21,
+      "median_ms": 17.22,
+      "p90_ms": 17.43,
+      "fps": 58.1
+    },
+    {
+      "backend": "onnx-cpu",
+      "frames": 100,
+      "mean_ms": 15.46,
+      "median_ms": 15.24,
+      "p90_ms": 16.49,
+      "fps": 65.6
+    },
+    {
+      "backend": "onnx-coreml",
+      "frames": 100,
+      "mean_ms": 7.92,
+      "median_ms": 7.85,
+      "p90_ms": 8.23,
+      "fps": 127.4
+    }
+  ]
+}
