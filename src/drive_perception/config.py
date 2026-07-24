@@ -34,7 +34,6 @@ class Train:
 @dataclass(frozen=True)
 class Config:
     models: Models
-    classes: list[str]
     detect: Detect
     tracker: str
     train: Train
@@ -55,7 +54,6 @@ def load_config(path: Path | None = None) -> Config:
 
     return Config(
         models=Models(**raw["models"]),
-        classes=list(raw["classes"]),
         detect=Detect(**raw["detect"]),
         tracker=tracker,
         train=Train(**raw["train"]),

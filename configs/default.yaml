@@ -8,13 +8,6 @@ models:
   edge: yolo11n
   accuracy: yolo11s
 
-# KITTI 2D classes we keep. The raw dataset has more, but these three are the ones
-# that matter for a driving-perception stack and that the tracking benchmark scores.
-classes:
-  - car
-  - pedestrian
-  - cyclist
-
 detect:
   imgsz: 640
   conf: 0.25

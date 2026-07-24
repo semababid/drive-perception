@@ -6,7 +6,6 @@ from drive_perception.config import load_config
 
 def test_config_loads():
     cfg = load_config()
-    assert cfg.classes == ["car", "pedestrian", "cyclist"]
     assert cfg.detect.imgsz > 0
     assert cfg.tracker in {"bytetrack", "botsort"}
 

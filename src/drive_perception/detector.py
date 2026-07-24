@@ -15,8 +15,6 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from .config import load_config
-
 if TYPE_CHECKING:
     import numpy as np
 
@@ -72,13 +70,6 @@ class Detector:
         # A pair is passed straight through. Driving frames are far wider than they
         # are tall, and forcing them square wastes most of the input on blank padding.
         self.imgsz = list(imgsz) if isinstance(imgsz, tuple) else imgsz
-
-    @classmethod
-    def from_config(cls, weights: str | Path | None = None, cfg=None) -> Detector:
-        """Build a detector using the thresholds and default model from configs/."""
-        cfg = cfg or load_config()
-        weights = weights or f"{cfg.models.edge}.pt"
-        return cls(weights, conf=cfg.detect.conf, iou=cfg.detect.iou, imgsz=cfg.detect.imgsz)
 
     def predict(self, source: str | Path | np.ndarray) -> list[Detection]:
         """Run detection on one image (path, array, or PIL image) and return Detections."""
