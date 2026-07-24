@@ -61,7 +61,7 @@ class Detector:
         weights: str | Path = "yolo11n.pt",
         conf: float = 0.25,
         iou: float = 0.7,
-        imgsz: int = 640,
+        imgsz: int | tuple[int, int] = 640,
     ) -> None:
         from ultralytics import YOLO
 
@@ -69,7 +69,9 @@ class Detector:
         self.names: dict[int, str] = self.model.names
         self.conf = conf
         self.iou = iou
-        self.imgsz = imgsz
+        # A pair is passed straight through. Driving frames are far wider than they
+        # are tall, and forcing them square wastes most of the input on blank padding.
+        self.imgsz = list(imgsz) if isinstance(imgsz, tuple) else imgsz
 
     @classmethod
     def from_config(cls, weights: str | Path | None = None, cfg=None) -> Detector:
