@@ -60,6 +60,7 @@ class Detector:
         conf: float = 0.25,
         iou: float = 0.7,
         imgsz: int | tuple[int, int] = 640,
+        device: str | None = None,
     ) -> None:
         from ultralytics import YOLO
 
@@ -70,6 +71,9 @@ class Detector:
         # A pair is passed straight through. Driving frames are far wider than they
         # are tall, and forcing them square wastes most of the input on blank padding.
         self.imgsz = list(imgsz) if isinstance(imgsz, tuple) else imgsz
+        # None lets Ultralytics pick. The benchmark sets it explicitly to compare the
+        # same model on cpu against mps, which is not a comparison auto-select allows.
+        self.device = device
 
     def predict(self, source: str | Path | np.ndarray) -> list[Detection]:
         """Run detection on one image (path, array, or PIL image) and return Detections."""
@@ -78,6 +82,7 @@ class Detector:
             conf=self.conf,
             iou=self.iou,
             imgsz=self.imgsz,
+            device=self.device,
             verbose=False,
         )[0]
         boxes = result.boxes
