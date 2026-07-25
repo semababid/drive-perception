@@ -5,6 +5,9 @@ data/raw/
 data/interim/
 data/processed/
 data/tracking/
+# Rebuildable INT8 calibration bundle and its zip, produced by build_calibration.py.
+data/int8_calib/
+data/int8_calib.zip
 !data/golden/
 !data/golden/**
 
