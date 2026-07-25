@@ -1,0 +1,33 @@
+{
+  "gpu": "Tesla T4",
+  "imgsz": [
+    224,
+    640
+  ],
+  "models": {
+    "yolo11n_kitti": {
+      "fp32": {
+        "median_ms": 5.834,
+        "p90_ms": 6.336,
+        "fps": 171.4
+      },
+      "fp16": {
+        "median_ms": 4.6,
+        "p90_ms": 4.753,
+        "fps": 217.4
+      }
+    },
+    "yolo11s_kitti": {
+      "fp32": {
+        "median_ms": 6.044,
+        "p90_ms": 8.743,
+        "fps": 165.5
+      },
+      "fp16": {
+        "median_ms": 4.403,
+        "p90_ms": 5.382,
+        "fps": 227.1
+      }
+    }
+  }
+}
