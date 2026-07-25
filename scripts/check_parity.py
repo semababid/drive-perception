@@ -68,14 +68,24 @@ def main() -> None:
     print(f"max score difference : {det['max_score_diff']}")
     print(f"class mismatches     : {det['class_mismatches']}")
 
+    # Per-model, so the evidence for each exported checkpoint is kept side by side
+    # rather than one run erasing the previous model's proof.
+    model = Path(args.weights).stem
     REPORTS.mkdir(parents=True, exist_ok=True)
-    (REPORTS / "parity.json").write_text(
+    out = REPORTS / f"parity_{model}.json"
+    out.write_text(
         json.dumps(
-            {"tolerance": RAW_TOLERANCE, "raw": raw, "detections": det, "passed": passed},
+            {
+                "model": model,
+                "tolerance": RAW_TOLERANCE,
+                "raw": raw,
+                "detections": det,
+                "passed": passed,
+            },
             indent=2,
         )
     )
-    print(f"\nwritten to {REPORTS / 'parity.json'}")
+    print(f"\nwritten to {out}")
     if not passed:
         raise SystemExit("parity check failed")
 

@@ -1,4 +1,5 @@
 {
+  "model": "yolo11n_kitti",
   "tolerance": 0.001,
   "raw": {
     "shape": [

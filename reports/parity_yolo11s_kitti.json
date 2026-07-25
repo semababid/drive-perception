@@ -1,0 +1,21 @@
+{
+  "model": "yolo11s_kitti",
+  "tolerance": 0.001,
+  "raw": {
+    "shape": [
+      1,
+      7,
+      2940
+    ],
+    "max_abs_diff": 0.0009765625,
+    "mean_abs_diff": 1.845324004534632e-05
+  },
+  "detections": {
+    "images": 10,
+    "same_detection_count": 10,
+    "max_box_diff_px": 0.0001,
+    "max_score_diff": 2e-06,
+    "class_mismatches": 0
+  },
+  "passed": true
+}
