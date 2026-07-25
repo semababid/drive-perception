@@ -1,0 +1,16 @@
+{
+  "gpu": "Tesla T4",
+  "imgsz": 640,
+  "eval_frames": 128,
+  "note": "Reconstructed from the notebook's printed table; the Colab session dropped on the final files.download() call, after all results had computed. mAP50-95 was not on screen and is omitted.",
+  "models": {
+    "yolo11n_kitti": {
+      "fp16": {"mAP50": 0.846, "median_ms": 5.983, "fps": 167.1},
+      "int8": {"mAP50": 0.805, "median_ms": 5.982, "fps": 167.2}
+    },
+    "yolo11s_kitti": {
+      "fp16": {"mAP50": 0.879, "median_ms": 6.655, "fps": 150.3},
+      "int8": {"mAP50": 0.862, "median_ms": 7.313, "fps": 136.7}
+    }
+  }
+}
