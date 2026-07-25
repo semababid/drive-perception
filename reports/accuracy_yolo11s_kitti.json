@@ -1,0 +1,66 @@
+{
+  "model": "yolo11s_kitti",
+  "images": 1496,
+  "results": [
+    {
+      "tier": "all",
+      "iou_threshold": 0.5,
+      "per_class_ap": {
+        "car": 0.9677,
+        "pedestrian": 0.8108,
+        "cyclist": 0.8706
+      },
+      "gt_counts": {
+        "car": 4365,
+        "pedestrian": 799,
+        "cyclist": 223
+      },
+      "mAP": 0.883
+    },
+    {
+      "tier": "easy",
+      "iou_threshold": 0.5,
+      "per_class_ap": {
+        "car": 0.9957,
+        "pedestrian": 0.9468,
+        "cyclist": 0.9501
+      },
+      "gt_counts": {
+        "car": 1224,
+        "pedestrian": 419,
+        "cyclist": 129
+      },
+      "mAP": 0.9642
+    },
+    {
+      "tier": "moderate",
+      "iou_threshold": 0.5,
+      "per_class_ap": {
+        "car": 0.9786,
+        "pedestrian": 0.6954,
+        "cyclist": 0.7517
+      },
+      "gt_counts": {
+        "car": 1933,
+        "pedestrian": 234,
+        "cyclist": 76
+      },
+      "mAP": 0.8086
+    },
+    {
+      "tier": "hard",
+      "iou_threshold": 0.5,
+      "per_class_ap": {
+        "car": 0.8401,
+        "pedestrian": 0.43,
+        "cyclist": 0.2503
+      },
+      "gt_counts": {
+        "car": 1208,
+        "pedestrian": 146,
+        "cyclist": 18
+      },
+      "mAP": 0.5068
+    }
+  ]
+}
