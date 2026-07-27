@@ -26,6 +26,7 @@ import numpy as np
 from .data.convert import CLASS_ID, CLASS_NAMES
 from .data.stats import Obj
 from .detector import Detection
+from .geometry import iou  # re-exported: callers still do `from ...evaluate import iou`
 
 # COCO names mapped onto the KITTI classes. `car` and `person` line up cleanly. The
 # cyclist row is the weak one: KITTI labels a rider and their bike as a single Cyclist
@@ -45,20 +46,6 @@ class GTBox:
     box: tuple[float, float, float, float]
     cls_id: int
     tier: str  # easy, moderate, hard, or ignored
-
-
-def iou(a: Sequence[float], b: Sequence[float]) -> float:
-    """Intersection over union of two xyxy boxes."""
-    ix1, iy1 = max(a[0], b[0]), max(a[1], b[1])
-    ix2, iy2 = min(a[2], b[2]), min(a[3], b[3])
-    iw, ih = max(0.0, ix2 - ix1), max(0.0, iy2 - iy1)
-    inter = iw * ih
-    if inter <= 0:
-        return 0.0
-    area_a = max(0.0, a[2] - a[0]) * max(0.0, a[3] - a[1])
-    area_b = max(0.0, b[2] - b[0]) * max(0.0, b[3] - b[1])
-    union = area_a + area_b - inter
-    return inter / union if union > 0 else 0.0
 
 
 def average_precision(scores: list[float], is_tp: list[bool], n_gt: int) -> float:

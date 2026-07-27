@@ -18,7 +18,7 @@ from collections.abc import Sequence
 from dataclasses import dataclass, field
 
 from .detector import Detection
-from .evaluate import iou
+from .geometry import iou
 from .tracker import Track
 
 
