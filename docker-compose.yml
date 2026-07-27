@@ -1,0 +1,19 @@
+services:
+  service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: drive-perception:latest
+    ports:
+      - "8000:8000"
+    # curl is not in the slim image, so the check hits /health with Python instead.
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - import urllib.request; urllib.request.urlopen('http://localhost:8000/health')
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s

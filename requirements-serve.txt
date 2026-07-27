@@ -1,0 +1,11 @@
+# Runtime dependencies for the prediction service only. Deliberately excludes torch and
+# ultralytics: the service runs the exported ONNX model through onnxruntime, so the
+# training stack never enters the image. opencv-python-headless is the GUI-free build,
+# which is both smaller and correct for a server with no display.
+fastapi>=0.115
+uvicorn[standard]>=0.30
+python-multipart>=0.0.9
+pydantic>=2.9
+onnxruntime>=1.19
+opencv-python-headless>=4.10
+numpy>=1.26,<2.3
