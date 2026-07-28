@@ -1,5 +1,10 @@
 # Build roadmap
 
+**Status: complete through #32 (v1.0).** Phases A to G are done: the data pipeline,
+detection and fine-tuning, tracking, the deployment and benchmark work, the service and
+container, the demo, and the docs. Phase H (depth and bird's-eye view) is optional and
+not started.
+
 The project ships as a sequence of small, self-contained commits grouped into eight
 phases. Each numbered item is one commit. The milestone checkpoints mark points where
 the project is already worth showing even if the rest is unfinished.
