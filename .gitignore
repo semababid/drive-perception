@@ -42,3 +42,7 @@ build/
 .DS_Store
 .idea/
 .vscode/
+
+# uv lockfile: not committed, so a host like Streamlit Cloud installs from
+# requirements.txt (the slim serving set) rather than the full locked project.
+uv.lock
