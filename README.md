@@ -7,7 +7,7 @@ containerised service you can call over HTTP.
 **[Live demo](https://drive-perception.streamlit.app)** · [Results](reports/results.md) ·
 [Design notes](docs/design.md)
 
-![Detections on a KITTI street scene](docs/demo.jpg)
+![Detection and tracking on a KITTI sequence](docs/demo.gif)
 
 A YOLO11 detector is fine-tuned on KITTI to find cars, pedestrians and cyclists, feeds a
 tracker that holds object identities across frames, and is exported to ONNX and measured
