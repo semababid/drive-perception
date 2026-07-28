@@ -21,6 +21,11 @@ outputs/
 *.mlpackage/
 *.engine
 
+# The one exception: the small edge model is committed so the hosted demo, which runs
+# from a bare checkout, has a model to load without a training step.
+!models/
+!models/yolo11n_kitti.onnx
+
 # Python
 .venv/
 __pycache__/

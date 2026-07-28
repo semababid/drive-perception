@@ -61,6 +61,11 @@ target-version = "py312"
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
 
+[tool.ruff.lint.per-file-ignores]
+# The demo inserts src/ on the path before importing the package, so its imports
+# deliberately do not all sit at the top of the file.
+"app/demo.py" = ["E402"]
+
 [tool.ruff.lint.flake8-bugbear]
 # FastAPI's dependency and parameter markers are meant to be called in argument
 # defaults; that is the framework's idiom, not the B008 mistake it looks like.

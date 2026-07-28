@@ -13,9 +13,15 @@ Run it with:
 from __future__ import annotations
 
 import os
+import sys
 import tempfile
 import time
 from pathlib import Path
+
+# Make drive_perception importable from a bare checkout, which is how a hosting service
+# like Streamlit Community Cloud runs the app: the repo root is on the path but the
+# package lives under src/, and installing the package would drag in the training stack.
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 import cv2
 import numpy as np

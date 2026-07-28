@@ -1,0 +1,7 @@
+# Dependencies for the hosted Streamlit demo (Streamlit Community Cloud reads this file).
+# It is the serving set plus streamlit, and deliberately no torch or ultralytics: the
+# demo runs the exported ONNX model, so the training stack never has to be installed.
+streamlit>=1.38
+onnxruntime>=1.19
+opencv-python-headless>=4.10
+numpy>=1.26,<2.3
